@@ -1,0 +1,59 @@
+# Skin Mirror — AI Beauty Advisor Prototype
+
+## Context
+Prototype demo cho Unilever Vietnam pilot tại Watson HCMC.
+Tablet tại kệ Simple, scan da shopper 5 giây, recommend 2 SKU.
+Hero feature: Time-lapse Skin Projection — show da shopper sẽ ra sao sau 4 tuần.
+Target audience: phụ nữ Việt 22-35 tuổi, shopper Watson HCMC.
+
+## Tech stack
+- Vite + React 18 + TypeScript
+- Tailwind CSS v3 (đã config sẵn với custom colors)
+- Recharts cho data visualization
+- Lucide React cho icons
+- KHÔNG dùng Next.js
+- KHÔNG dùng shadcn components — pure Tailwind only
+- KHÔNG suggest thêm package mới (framer-motion, MUI, etc.) trừ khi user yêu cầu
+
+## Custom Tailwind colors đã có sẵn
+- text-ink / bg-ink: #1A1A1A (primary text)
+- text-muted: #6B7F75 (secondary text)
+- text-tertiary: #888780 (subtle text)
+- bg-cream: #FAFAF7 (warm white background)
+- bg-sand: #F1EFE8 (lighter beige)
+- border-line: #E5E5E5 (subtle border)
+- text-purple-600 / bg-purple-600: #534AB7 (primary accent)
+- bg-purple-50: #EEEDFE (light purple tint)
+- bg-purple-900: #26215C (dark purple)
+
+## Design system
+- Font heading: font-serif (Georgia)
+- Font body: system sans (default)
+- Border radius: rounded-md (6px) cho button, rounded-lg (8px) cho card
+- Spacing: dùng Tailwind scale (p-4, gap-2, etc.)
+- KHÔNG gradient, KHÔNG shadow nặng, KHÔNG animation flashy
+- Style: clinical, minimal, trustworthy — không gimmick
+- Touch targets ≥ 44px (h-11 minimum cho button)
+
+## UX principles
+- Vietnamese UI strings (tiếng Việt cho user-facing text)
+- English code (variable names, comments)
+- Progressive disclosure: hide complexity behind taps
+- Privacy-first messaging cho consent screens
+
+## Code conventions
+- Functional components only, no class components
+- TypeScript strict, define interfaces cho props
+- Tailwind className, không inline style trừ dynamic value
+- File naming: PascalCase cho component files (e.g. ScanScreen.tsx)
+- One component per file
+- useState cho local state, no Redux/Zustand
+- Default export cho component chính của file
+
+## When asked to build a component
+- Đọc file đã có để hiểu existing pattern trước khi tạo mới
+- Generate complete working code, không placeholder
+- Include TypeScript types đầy đủ
+- Test that it compiles (no unused imports, no `any` types)
+- Place trong src/components/ folder
+- Don't modify other files unless explicitly asked
