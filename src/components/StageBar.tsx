@@ -6,10 +6,11 @@ export interface StageBarProps {
 const STAGES: string[] = [
   "1 · Chờ",
   "2 · Đồng ý",
-  "3 · Scan",
-  "4 · Kết quả",
-  "5 · Dự đoán",
-  "6 · Lưu",
+  "3 · Chọn",
+  "4 · Scan",
+  "5 · Kết quả",
+  "6 · Dự đoán",
+  "7 · Lưu",
 ]
 
 export default function StageBar({ currentStage, onStageClick }: StageBarProps) {

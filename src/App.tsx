@@ -2,6 +2,7 @@ import TabletFrame from "./components/TabletFrame"
 import StageBar from "./components/StageBar"
 import IdleScreen from "./components/IdleScreen"
 import ConsentScreen from "./components/ConsentScreen"
+import CategoryScreen from "./components/CategoryScreen"
 import ScanScreen from "./components/ScanScreen"
 import ResultScreen from "./components/ResultScreen"
 import ProjectionScreen from "./components/ProjectionScreen"
@@ -11,8 +12,9 @@ import { useState } from "react"
 
 function App() {
   const [currentStage, setCurrentStage] = useState<number>(0)
+  const [selectedCategory, setSelectedCategory] = useState<string>("skin")
 
-  const stageBarCurrentStage = currentStage === 99 ? 3 : currentStage
+  const stageBarCurrentStage = currentStage === 99 ? 4 : currentStage
 
   const renderStageContent = () => {
     switch (currentStage) {
@@ -26,23 +28,38 @@ function App() {
           />
         )
       case 2:
-        return <ScanScreen onComplete={() => setCurrentStage(3)} />
+        return (
+          <CategoryScreen
+            onSelect={(cat) => {
+              setSelectedCategory(cat)
+              setCurrentStage(3)
+            }}
+            onCancel={() => setCurrentStage(1)}
+          />
+        )
       case 3:
         return (
-          <ResultScreen
-            onNext={() => setCurrentStage(4)}
-            onScanAgain={() => setCurrentStage(2)}
-            onFeedbackNo={() => setCurrentStage(99)}
+          <ScanScreen
+            key={selectedCategory}
+            onComplete={() => setCurrentStage(4)}
           />
         )
       case 4:
         return (
-          <ProjectionScreen
+          <ResultScreen
             onNext={() => setCurrentStage(5)}
-            onSaveQR={() => setCurrentStage(5)}
+            onScanAgain={() => setCurrentStage(3)}
+            onFeedbackNo={() => setCurrentStage(99)}
           />
         )
       case 5:
+        return (
+          <ProjectionScreen
+            onNext={() => setCurrentStage(6)}
+            onSaveQR={() => setCurrentStage(6)}
+          />
+        )
+      case 6:
         return <ShareScreen onDone={() => setCurrentStage(0)} />
       case 99:
         return <RecoveryScreen onBackToIdle={() => setCurrentStage(0)} />
@@ -51,15 +68,19 @@ function App() {
     }
   }
 
-  const prevDisabled = currentStage === 0 || currentStage === 99
-  const nextDisabled = currentStage === 5 || currentStage === 99
+  const prevDisabled = currentStage === 0
+  const nextDisabled = currentStage === 6 || currentStage === 99
 
   const handlePrev = () => {
+    if (currentStage === 99) {
+      setCurrentStage(4)
+      return
+    }
     setCurrentStage((prev) => Math.max(0, prev - 1))
   }
 
   const handleNext = () => {
-    setCurrentStage((prev) => Math.min(5, prev + 1))
+    setCurrentStage((prev) => Math.min(6, prev + 1))
   }
 
   return (
@@ -84,7 +105,7 @@ function App() {
         <span className="text-xs text-muted self-center">
           {currentStage === 99
             ? "Recovery flow"
-            : `Stage ${currentStage + 1} / 6`}
+            : `Stage ${currentStage + 1} / 7`}
         </span>
 
         <button
