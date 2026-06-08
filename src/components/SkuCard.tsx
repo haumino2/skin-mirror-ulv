@@ -16,11 +16,13 @@ export default function SkuCard({
   variant = 'primary',
 }: SkuCardProps) {
   const isPrimary = variant === 'primary'
+  const hasPrice = price.trim().length > 0
+  const hasReason = reason.trim().length > 0
 
   return (
     <div
       className={[
-        'relative min-h-min rounded-lg border bg-white p-3',
+        'relative min-h-min rounded-lg border bg-white p-3 min-w-0 overflow-hidden',
         isPrimary ? 'border-unilever-600' : 'border-tertiary',
       ].join(' ')}
     >
@@ -33,13 +35,21 @@ export default function SkuCard({
         {tag}
       </span>
 
-      <div className="font-serif text-sm leading-tight text-ink mb-0.5">{name}</div>
+      <div className="font-serif text-sm leading-tight text-ink mb-0.5 break-words">
+        {name}
+      </div>
 
-      <p className="mb-1.5 text-[10px] leading-snug text-tertiary">{description}</p>
+      <p className="mb-1.5 text-[10px] leading-snug text-tertiary break-words">
+        {description}
+      </p>
 
-      <div className="mb-1.5 text-sm font-medium text-ink">{price}</div>
+      {hasPrice ? (
+        <div className="mb-1.5 text-sm font-medium text-ink break-words">{price}</div>
+      ) : null}
 
-      <p className="text-[10px] leading-snug text-muted">{reason}</p>
+      {hasReason ? (
+        <p className="text-[10px] leading-snug text-muted break-words">{reason}</p>
+      ) : null}
     </div>
   )
 }

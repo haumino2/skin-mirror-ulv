@@ -9,10 +9,12 @@ import ProjectionScreen from "./components/ProjectionScreen"
 import ShareScreen from "./components/ShareScreen"
 import RecoveryScreen from "./components/RecoveryScreen"
 import { useState } from "react"
+import type { SkinAnalysisResult } from "./lib/claudeSkinAnalysis"
 
 function App() {
   const [currentStage, setCurrentStage] = useState<number>(0)
   const [selectedCategory, setSelectedCategory] = useState<string>("skin")
+  const [skinAnalysis, setSkinAnalysis] = useState<SkinAnalysisResult | null>(null)
 
   const stageBarCurrentStage = currentStage === 99 ? 4 : currentStage
 
@@ -41,14 +43,21 @@ function App() {
         return (
           <ScanScreen
             key={selectedCategory}
-            onComplete={() => setCurrentStage(4)}
+            onComplete={(result) => {
+              setSkinAnalysis(result)
+              setCurrentStage(4)
+            }}
           />
         )
       case 4:
         return (
           <ResultScreen
+            analysis={skinAnalysis}
             onNext={() => setCurrentStage(5)}
-            onScanAgain={() => setCurrentStage(3)}
+            onScanAgain={() => {
+              setSkinAnalysis(null)
+              setCurrentStage(3)
+            }}
             onFeedbackNo={() => setCurrentStage(99)}
           />
         )
