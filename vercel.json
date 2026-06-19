@@ -1,5 +1,3 @@
 {
-  "rewrites": [
-    { "source": "/api/vieneu/(.*)", "destination": "/api/vieneu/$1" }
-  ]
+  "framework": "vite"
 }
