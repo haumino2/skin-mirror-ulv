@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { Camera, ImageUp, RefreshCcw, UserCircle } from "lucide-react"
 import { analyzeSkin, type SkinAnalysisResult } from "../lib/claudeSkinAnalysis"
+import { trackEvent } from "../lib/eventTracker"
 
 export interface ScanScreenProps {
   onComplete: (result: SkinAnalysisResult) => void
@@ -147,8 +148,10 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
     }
     setIsLoading(true)
     setError(null)
+    trackEvent('scan_started', { mode })
     try {
       const result = await analyzeSkin(previewDataUrl)
+      trackEvent('scan_completed', { skinType: result.skinType })
       onComplete(result)
     } catch (e) {
       setError(e instanceof Error ? e.message : "Phân tích thất bại.")
@@ -157,23 +160,23 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[520px]">
+    <div className="flex flex-col items-center justify-center min-h-[520px] px-5 pb-5">
       <div className="w-full">
-        <div className="font-serif text-xl text-ink mb-1.5 text-center">
+        <h1 className="text-2xl font-bold text-ink mb-1.5 text-center">
           Phân tích da mặt
-        </div>
-        <div className="text-xs text-muted text-center mb-5">
+        </h1>
+        <p className="text-sm text-secondary leading-relaxed text-center mb-5">
           Upload ảnh hoặc chụp từ webcam để bắt đầu
-        </div>
+        </p>
 
         <div className="flex items-center justify-center gap-2 mb-3">
           <button
             type="button"
             className={[
-              "text-[11px] px-3 py-1.5 rounded-md border",
+              "text-xs px-4 py-2 rounded-xl transition-all",
               mode === "upload"
-                ? "bg-unilever-600 text-white border-unilever-600"
-                : "bg-white text-ink border-line",
+                ? "bg-unilever-600 text-white"
+                : "bg-white text-ink border border-line shadow-sm",
             ].join(" ")}
             onClick={() => {
               reset()
@@ -190,10 +193,10 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
           <button
             type="button"
             className={[
-              "text-[11px] px-3 py-1.5 rounded-md border",
+              "text-xs px-4 py-2 rounded-xl transition-all",
               mode === "camera"
-                ? "bg-unilever-600 text-white border-unilever-600"
-                : "bg-white text-ink border-line",
+                ? "bg-unilever-600 text-white"
+                : "bg-white text-ink border border-line shadow-sm",
               !canUseCamera ? "opacity-40 cursor-not-allowed" : "",
             ].join(" ")}
             onClick={() => {
@@ -213,7 +216,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
 
         <div className="w-full max-w-[360px] mx-auto mb-3">
           {mode === "upload" ? (
-            <div className="bg-white border border-line rounded-lg p-3">
+            <div className="bg-white rounded-2xl shadow-sm p-4">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -226,10 +229,10 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
                 disabled={isLoading}
               />
 
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  className="flex-1 bg-ink text-white text-sm font-medium py-2.5 rounded-md hover:opacity-90 disabled:opacity-50"
+                  className="flex-1 bg-unilever-600 text-white rounded-xl h-11 text-sm font-semibold hover:bg-unilever-700 active:scale-[0.98] transition-all disabled:opacity-50"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isLoading}
                 >
@@ -237,7 +240,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
                 </button>
                 <button
                   type="button"
-                  className="shrink-0 bg-white border border-line rounded-md px-3 py-2 text-xs text-ink disabled:opacity-50"
+                  className="shrink-0 bg-white border border-line rounded-xl px-3 h-11 text-xs text-ink disabled:opacity-50"
                   onClick={reset}
                   disabled={isLoading && !previewDataUrl}
                   title="Làm mới"
@@ -250,8 +253,8 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
               </div>
             </div>
           ) : (
-            <div className="bg-white border border-line rounded-lg p-3">
-              <div className="relative rounded-md overflow-hidden bg-sand w-full aspect-square flex items-center justify-center">
+            <div className="bg-white rounded-2xl shadow-sm p-4">
+              <div className="relative rounded-2xl overflow-hidden bg-sand w-full aspect-square flex items-center justify-center">
                 <video
                   ref={videoRef}
                   className="w-full h-full object-cover"
@@ -260,16 +263,16 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
                   onCanPlay={() => setIsCameraReady(true)}
                 />
                 {!isCameraReady ? (
-                  <div className="absolute text-[11px] text-tertiary">
+                  <div className="absolute text-xs text-muted">
                     Đang khởi động camera...
                   </div>
                 ) : null}
               </div>
 
-              <div className="mt-2.5 flex gap-2">
+              <div className="mt-3 flex gap-2">
                 <button
                   type="button"
-                  className="flex-1 bg-ink text-white text-sm font-medium py-2.5 rounded-md hover:opacity-90 disabled:opacity-50"
+                  className="flex-1 bg-unilever-600 text-white rounded-xl h-11 text-sm font-semibold hover:bg-unilever-700 active:scale-[0.98] transition-all disabled:opacity-50"
                   onClick={() => void captureFromCamera()}
                   disabled={isLoading || !isCameraReady}
                 >
@@ -277,7 +280,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
                 </button>
                 <button
                   type="button"
-                  className="shrink-0 bg-white border border-line rounded-md px-3 py-2 text-xs text-ink disabled:opacity-50"
+                  className="shrink-0 bg-white border border-line rounded-xl px-3 h-11 text-xs text-ink disabled:opacity-50"
                   onClick={reset}
                   disabled={isLoading && !previewDataUrl}
                 >
@@ -292,7 +295,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
         </div>
 
         <div className="w-full max-w-[360px] mx-auto">
-          <div className="relative w-full aspect-square rounded-lg bg-sand border border-line overflow-hidden flex items-center justify-center mb-3">
+          <div className="relative w-full aspect-square rounded-2xl bg-sand overflow-hidden flex items-center justify-center mb-3 shadow-sm">
             {previewDataUrl ? (
               <img
                 src={previewDataUrl}
@@ -301,14 +304,14 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
               />
             ) : (
               <div className="flex flex-col items-center gap-2 text-tertiary">
-                <UserCircle size={64} style={{ color: "#B4B2A9" }} />
-                <div className="text-[11px]">Chưa có ảnh</div>
+                <UserCircle size={64} className="text-tertiary" />
+                <div className="text-xs text-muted">Chưa có ảnh</div>
               </div>
             )}
 
             {isLoading ? (
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <div className="bg-white/90 rounded-md px-3 py-2 text-[11px] text-ink">
+                <div className="bg-white/95 rounded-2xl px-4 py-2.5 text-xs text-ink shadow-sm">
                   Đang phân tích bằng Skin Mirror AI...
                 </div>
               </div>
@@ -316,14 +319,19 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
           </div>
 
           {error ? (
-            <div className="mb-2 text-[11px] text-red-700 bg-red-50 border border-red-100 rounded-md px-3 py-2">
+            <div className="mb-3 text-xs text-red-700 bg-red-50 rounded-2xl px-4 py-2.5">
               {error}
             </div>
           ) : null}
 
           <button
             type="button"
-            className="w-full bg-unilever-600 text-white text-sm font-medium py-2.5 rounded-md hover:opacity-90 disabled:opacity-50"
+            className={[
+              "bg-unilever-600 text-white rounded-xl h-14 text-base font-semibold w-full transition-all",
+              "hover:bg-unilever-700 active:scale-[0.98]",
+              "disabled:cursor-not-allowed disabled:hover:bg-unilever-600 disabled:active:scale-100",
+              !previewDataUrl && !isLoading ? "opacity-40" : "",
+            ].join(" ")}
             onClick={() => void runAnalysis()}
             disabled={isLoading || !previewDataUrl}
           >
@@ -334,4 +342,3 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
     </div>
   )
 }
-

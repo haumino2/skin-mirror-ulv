@@ -1,46 +1,32 @@
 export interface StageBarProps {
   currentStage: number
-  onStageClick?: (stage: number) => void
 }
 
 const STAGES: string[] = [
-  "1 · Chờ",
-  "2 · Đồng ý",
-  "3 · Chọn",
-  "4 · Scan",
-  "5 · Kết quả",
-  "6 · Dự đoán",
-  "7 · Lưu",
+  "Chờ",
+  "Đồng ý",
+  "Chọn",
+  "Scan",
+  "Kết quả",
+  "Mô phỏng",
+  "Lưu",
 ]
 
-export default function StageBar({ currentStage, onStageClick }: StageBarProps) {
+export default function StageBar({ currentStage }: StageBarProps) {
+  const stageIndex = Math.min(Math.max(currentStage, 0), STAGES.length - 1)
+  const progress = ((stageIndex + 1) / STAGES.length) * 100
+
   return (
-    <div className="flex gap-1.5 mb-3.5">
-      {STAGES.map((label, index) => {
-        const state =
-          index === currentStage ? "active" : index < currentStage ? "done" : "pending"
-
-        const stateClasses =
-          state === "active"
-            ? "bg-unilever-900 text-white"
-            : state === "done"
-              ? "bg-unilever-50 text-unilever-600"
-              : "bg-gray-100 text-gray-500"
-
-        return (
-          <button
-            key={label}
-            type="button"
-            className={[
-              "flex-1 py-1.5 px-2.5 text-xs rounded-md text-center cursor-pointer transition",
-              stateClasses,
-            ].join(" ")}
-            onClick={() => onStageClick?.(index)}
-          >
-            {label}
-          </button>
-        )
-      })}
+    <div className="max-h-[36px] px-5 pt-3 shrink-0">
+      <div className="h-1 w-full overflow-hidden rounded-full bg-unilever-100">
+        <div
+          className="h-1 rounded-full bg-unilever-600 transition-all duration-300"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <p className="mt-1 text-center text-xs leading-none text-muted">
+        Bước {stageIndex + 1} · {STAGES[stageIndex]}
+      </p>
     </div>
   )
 }

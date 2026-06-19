@@ -33,7 +33,7 @@ interface ChartRow {
   hydrationLower: number
 }
 
-const CREAM_FILL = '#FAFAF7'
+const CREAM_FILL = '#f7f9fc'
 
 interface TooltipPayloadEntry {
   dataKey?: string | number
@@ -77,7 +77,7 @@ function ProjectionTooltip({
   }
 
   return (
-    <div className="rounded-md border border-line bg-white px-2 py-1.5 text-[10px]">
+    <div className="rounded-2xl bg-white px-3 py-2 shadow-sm text-[10px]">
       <div className="mb-0.5 font-medium text-ink">
         {label ?? ''} (tuần)
       </div>
@@ -121,12 +121,12 @@ export default function ProjectionChart({
   } as const
 
   return (
-    <div className="mb-3.5 rounded-lg border border-line bg-white p-3.5 pb-2 pt-3">
+    <div className="mb-4 rounded-2xl bg-white p-4 pb-2 shadow-sm">
       <h3 className="mb-1 ml-2 text-[11px] font-medium text-muted">
         Trajectory 3 metric chính
       </h3>
       <p className="mb-2 ml-2 text-[10px] italic text-tertiary">
-        Vùng nhạt = khoảng tin cậy 80% · đường đậm = giá trị dự đoán trung bình
+        Vùng nhạt = khoảng tin cậy 80% · đường đậm = giá trị mô phỏng trung bình
       </p>
 
       <div className="mb-1.5 ml-2 flex gap-3 text-[10px] text-muted">
@@ -152,14 +152,14 @@ export default function ProjectionChart({
           >
             <XAxis
               dataKey="week"
-              tick={{ fontSize: 10, fill: '#888780' }}
+              tick={{ fontSize: 10, fill: '#a0aec0' }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
               domain={[0, 10]}
               ticks={[0, 2, 4, 6, 8, 10]}
-              tick={{ fontSize: 10, fill: '#888780' }}
+              tick={{ fontSize: 10, fill: '#a0aec0' }}
               axisLine={false}
               tickLine={false}
             />

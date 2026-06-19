@@ -7,24 +7,28 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
-        serif: ['Lora', 'Georgia', 'serif'],
+        sans: ['"Be Vietnam Pro"', 'sans-serif'],
       },
       colors: {
-        ink: '#1A1A1A',
-        muted: '#6B7F75',
-        tertiary: '#888780',
-        cream: '#FAFAF7',
-        sand: '#F1EFE8',
-        line: '#E5E5E5',
+        secondary: '#4a5568',
         unilever: {
-          50: '#E8EDFC',
-          100: '#C4D0F8',
-          400: '#5774DC',
-          600: '#1F36C7',
-          800: '#172994',
-          900: '#0A1F70',
+          50: '#e6f0fa',
+          100: '#cce0f5',
+          200: '#99c2eb',
+          300: '#66a3e0',
+          400: '#3385d6',
+          500: '#0066cc',
+          600: '#004d99',
+          700: '#003a73',
+          800: '#00274d',
+          900: '#001326',
         },
+        ink: '#1a1a2e',
+        muted: '#718096',
+        tertiary: '#a0aec0',
+        line: '#e2e8f0',
+        sand: '#f7f9fc',
+        cream: '#f0f4f8',
       },
       keyframes: {
         'scan-spin': {
@@ -34,10 +38,15 @@ export default {
           '0%, 100%': { opacity: '0', transform: 'scale(0.5)' },
           '50%': { opacity: '0.9', transform: 'scale(1.4)' },
         },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
       },
       animation: {
         'scan-spin': 'scan-spin 1.8s linear infinite',
         'scan-dot': 'scan-dot 5s ease-in-out infinite',
+        'fade-in': 'fade-in 0.5s ease-out forwards',
       },
     },
   },

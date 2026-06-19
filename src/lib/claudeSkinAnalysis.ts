@@ -1,3 +1,6 @@
+import { SKU_CATALOGUE } from '../data/skuCatalogue'
+import type { Sku, SkuConcern } from '../data/skuCatalogue'
+
 export type SkinType = "oily" | "dry" | "combination" | "normal"
 
 export type SkinScores = {
@@ -80,7 +83,10 @@ export async function analyzeSkin(imageBase64: string): Promise<SkinAnalysisResu
     "Analyze this face image for skin condition. " +
     "Return ONLY valid JSON (no markdown, no explanation) with exactly this structure: " +
     "{ skinType: 'oily'|'dry'|'combination'|'normal', concerns: string[], scores: { redness: number, oiliness: number, texture: number, pores: number, hydration: number, pigmentation: number }, recommendations: string[] } " +
-    "All scores 0-100. recommendations should mention Unilever brands: Simple, Pond's, Vaseline, Dove."
+    "All scores 0-100. recommendations: write exactly 1 string in Vietnamese (tiếng Việt), 2-3 sentences max, " +
+    "describing the skin condition and what the customer should prioritize. " +
+    "Example: 'Da bạn đang có dầu cao vùng chữ T và hơi mất nước. Ưu tiên làm sạch nhẹ và dưỡng ẩm cân bằng.' " +
+    "Only mention Simple brand products. Do not use English."
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -118,11 +124,81 @@ export async function analyzeSkin(imageBase64: string): Promise<SkinAnalysisResu
     throw new Error(`Claude API error (${res.status}): ${errText || res.statusText}`)
   }
 
-  const data = (await res.json()) as any
-  const text: string = String(data?.content?.[0]?.text ?? "").trim()
+  const data = (await res.json()) as {
+    content?: Array<{ type?: string; text?: string }>
+  }
+  const text: string = String(data.content?.[0]?.text ?? "").trim()
   if (!text) throw new Error("Claude API returned empty text.")
 
   const parsed = extractJson(text)
   return normalizeResult(parsed)
 }
 
+export async function selectSkusForCustomer(
+  analysis: SkinAnalysisResult,
+  concern: SkuConcern
+): Promise<Sku[]> {
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
+  if (!apiKey) return getFallbackSkus(concern)
+
+  const catalogueText = JSON.stringify(SKU_CATALOGUE.map(s => ({
+    id: s.id, brand: s.brand, name: s.name,
+    concerns: s.concerns, bestForSkinType: s.bestForSkinType,
+    keyBenefit: s.keyBenefit
+  })))
+
+  const prompt = `Bạn là chuyên gia gợi ý sản phẩm skincare.
+Thông tin da khách hàng:
+- Loại da: ${analysis.skinType}
+- Dầu: ${analysis.scores.oiliness}/100
+- Độ ẩm: ${analysis.scores.hydration}/100
+- Đỏ/viêm: ${analysis.scores.redness}/100
+- Mối quan tâm chính: ${concern}
+
+Danh sách sản phẩm: ${catalogueText}
+
+Chọn đúng 2 sản phẩm phù hợp nhất. Trả về ONLY valid JSON array, không markdown:
+[
+  {"id": "SKU00X", "matchReason": "lý do ngắn bằng tiếng Việt tối đa 10 từ"},
+  {"id": "SKU00X", "matchReason": "lý do ngắn bằng tiếng Việt tối đa 10 từ"}
+]`
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 256,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    })
+
+    const data = await res.json()
+    const text = String(data.content?.[0]?.text ?? '').trim()
+    const cleaned = text.replace(/```json|```/g, '').trim()
+    const picks = JSON.parse(cleaned) as Array<{ id: string; matchReason: string }>
+
+    return picks
+      .map((pick): Sku | null => {
+        const sku = SKU_CATALOGUE.find(s => s.id === pick.id)
+        if (!sku) return null
+        return { ...sku, matchReason: pick.matchReason }
+      })
+      .filter((s): s is Sku => s !== null)
+      .slice(0, 2)
+  } catch {
+    return getFallbackSkus(concern)
+  }
+}
+
+function getFallbackSkus(concern: SkuConcern): Sku[] {
+  return SKU_CATALOGUE
+    .filter(s => s.concerns.includes(concern))
+    .slice(0, 2)
+}

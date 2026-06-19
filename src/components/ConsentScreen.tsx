@@ -1,46 +1,54 @@
+import { Check } from 'lucide-react'
+import { trackEvent } from '../lib/eventTracker'
+
 export interface ConsentScreenProps {
   onAccept: () => void
   onCancel: () => void
 }
 
+const PRIVACY_POINTS = [
+  'Ảnh chỉ được dùng để phân tích da trong phiên này.',
+  'Skin Mirror không lưu ảnh gốc nếu bạn không đồng ý.',
+  'Kết quả chỉ mang tính tham khảo chăm sóc da, không thay thế tư vấn chuyên môn.',
+]
+
 export default function ConsentScreen({ onAccept, onCancel }: ConsentScreenProps) {
+  const handleAccept = () => {
+    trackEvent('consent_accepted')
+    onAccept()
+  }
+
   return (
-    <div className="flex flex-col h-full">
-      <div className="font-serif text-xl text-ink mb-1.5">Trước khi bắt đầu</div>
+    <div className="flex flex-col justify-between min-h-full px-5 pb-5">
+      <div>
+        <h1 className="text-2xl font-bold text-ink mb-4">Trước khi scan da</h1>
 
-      <div className="text-xs text-muted leading-relaxed mb-4">
-        Mirror sẽ scan da bạn trong 5 giây để gợi ý sản phẩm phù hợp.
-      </div>
-
-      <div className="bg-white border border-line rounded-md p-3.5 mb-4">
-        <div className="text-xs font-medium text-ink mb-1.5">Privacy by design</div>
-        <div className="space-y-1">
-          <div className="text-xs text-muted leading-relaxed">
-            · Ảnh xử lý trực tiếp trên tablet, không gửi lên cloud
-          </div>
-          <div className="text-xs text-muted leading-relaxed">
-            · Không lưu ảnh sau khi bạn rời khỏi
-          </div>
-          <div className="text-xs text-muted leading-relaxed">
-            · Bạn có thể chọn không show kết quả trên màn hình
+        <div className="bg-unilever-50 rounded-2xl p-4">
+          <div className="space-y-2.5">
+            {PRIVACY_POINTS.map((point) => (
+              <div key={point} className="flex items-start gap-2 text-xs text-muted leading-relaxed">
+                <Check className="w-4 h-4 shrink-0 text-unilever-600 mt-0.5" strokeWidth={2.5} aria-hidden />
+                <span>{point}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="flex gap-2.5">
+      <div className="flex flex-col gap-3 pt-6">
         <button
           type="button"
-          className="h-11 bg-ink text-white px-4 py-2.5 rounded-md text-sm font-medium hover:opacity-90 flex-shrink-0 flex items-center justify-center"
-          onClick={onAccept}
+          className="bg-unilever-600 text-white rounded-xl h-14 text-base font-semibold w-full hover:bg-unilever-700 active:scale-[0.98] transition-all"
+          onClick={handleAccept}
         >
-          Đồng ý, scan ngay
+          Tôi đồng ý và bắt đầu
         </button>
         <button
           type="button"
-          className="h-11 bg-transparent border border-tertiary text-ink px-4 py-2.5 rounded-md text-sm hover:bg-sand flex items-center justify-center"
+          className="bg-white text-ink rounded-xl h-14 text-base border border-line w-full"
           onClick={onCancel}
         >
-          Để sau
+          Quay lại
         </button>
       </div>
     </div>

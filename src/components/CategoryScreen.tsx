@@ -1,4 +1,5 @@
-import { Sparkles, Check, Lock } from "lucide-react"
+import { useState } from "react"
+import { Sparkles, Lock } from "lucide-react"
 
 export type CategoryStatus = "available" | "coming-soon"
 
@@ -112,23 +113,25 @@ function CategoryGlyph({ icon }: { icon: CategoryIconId }) {
 }
 
 export default function CategoryScreen({ onSelect, onCancel }: CategoryScreenProps) {
+  const [selectedId, setSelectedId] = useState<string | null>("skin")
+
   return (
-    <div className="flex flex-col h-full">
-      <header className="shrink-0">
-        <p className="text-[10px] text-unilever-600 uppercase tracking-widest font-medium mb-1.5 text-center flex items-center justify-center gap-1.5">
+    <div className="flex flex-col h-full px-5 pb-5">
+      <header className="shrink-0 mb-5">
+        <p className="text-[11px] font-semibold tracking-widest text-unilever-600 uppercase mb-1.5 text-center flex items-center justify-center gap-1.5">
           <Sparkles className="w-3 h-3 shrink-0" aria-hidden />
-          <span>BẠN MUỐN SCAN GÌ HÔM NAY?</span>
-          <Check className="w-3 h-3 shrink-0" strokeWidth={2.25} aria-hidden />
+          <span>Bạn muốn scan gì hôm nay?</span>
         </p>
-        <h1 className="font-serif text-lg text-ink mb-1 text-center">Chọn loại scan</h1>
-        <p className="text-[11px] text-tertiary leading-relaxed text-center mb-5">
+        <h1 className="text-2xl font-bold text-ink mb-1 text-center">Chọn loại scan</h1>
+        <p className="text-sm text-secondary leading-relaxed text-center">
           Mirror sẽ phân tích và gợi ý sản phẩm phù hợp cho bạn
         </p>
       </header>
 
-      <div className="grid grid-cols-2 gap-2.5 mb-4">
+      <div className="grid grid-cols-2 gap-3 mb-4">
         {CATEGORIES.map((category) => {
           const isAvailable = category.status === "available"
+          const isSelected = selectedId === category.id
 
           return (
             <button
@@ -136,13 +139,16 @@ export default function CategoryScreen({ onSelect, onCancel }: CategoryScreenPro
               type="button"
               disabled={!isAvailable}
               onClick={() => {
-                if (isAvailable) onSelect(category.id)
+                if (!isAvailable) return
+                setSelectedId(category.id)
+                onSelect(category.id)
               }}
               className={[
-                "relative bg-white border rounded-lg p-3.5 text-left transition-all min-h-[5.75rem]",
-                isAvailable
-                  ? "border-unilever-600 border-[1.5px] cursor-pointer hover:border-unilever-400 hover:bg-unilever-50/30"
-                  : "border-line opacity-50 cursor-not-allowed",
+                "relative bg-white rounded-2xl shadow-sm p-4 text-left transition-all min-h-[5.75rem]",
+                isAvailable ? "cursor-pointer" : "opacity-40 pointer-events-none",
+                isSelected && isAvailable
+                  ? "ring-2 ring-unilever-600 ring-offset-2"
+                  : "",
               ].join(" ")}
             >
               <div className="flex justify-between items-start mb-3">
@@ -151,32 +157,31 @@ export default function CategoryScreen({ onSelect, onCancel }: CategoryScreenPro
                 </div>
 
                 {isAvailable ? (
-                  <div className="flex items-center gap-1 text-[10px] text-green-700 font-medium shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-600" aria-hidden />
-                    <span>Có sẵn</span>
-                  </div>
+                  <span className="shrink-0 rounded-full bg-unilever-600 px-2 py-0.5 text-[10px] font-medium text-white">
+                    Có sẵn
+                  </span>
                 ) : (
                   <div className="flex items-center gap-1 text-[10px] text-tertiary shrink-0">
-                    <Lock className="w-[11px] h-[11px] shrink-0 text-[#888780]" aria-hidden />
+                    <Lock className="w-[11px] h-[11px] shrink-0 text-tertiary" aria-hidden />
                     <span>Sắp ra mắt</span>
                   </div>
                 )}
               </div>
 
-              <div className="font-serif text-base text-ink mb-0.5 leading-tight">{category.label}</div>
+              <div className="font-semibold text-base text-ink mb-0.5 leading-tight">{category.label}</div>
               <div className="text-[10px] text-tertiary uppercase tracking-wider mb-1.5">
                 {category.subtitle}
               </div>
-              <div className="text-[11px] text-muted leading-snug">{category.brands}</div>
+              <div className="text-xs text-muted leading-snug">{category.brands}</div>
             </button>
           )
         })}
       </div>
 
-      <div className="mt-4 text-center shrink-0">
+      <div className="mt-auto text-center shrink-0">
         <button
           type="button"
-          className="bg-transparent border border-tertiary text-[11px] text-ink px-3.5 py-1.5 rounded-md hover:bg-sand min-h-[2.25rem]"
+          className="text-unilever-600 underline-offset-2 text-sm hover:underline"
           onClick={onCancel}
         >
           Quay lại

@@ -18,8 +18,8 @@ export const PROJECTION_DATA: Record<ScenarioKey, ScenarioData> = {
     confidence: [0, 0.3, 0.5, 0.8, 1.1],
     evidence:
       '<strong>Combo Toner + Moisturizer:</strong> giải dầu 32% + viêm 45% trong 4 tuần. Texture cải thiện chậm hơn (sau tuần 6).',
-    label: 'Dùng combo gợi ý',
-    color: '#534AB7',
+    label: 'Dùng routine gợi ý',
+    color: '#004d99',
   },
   cleanser: {
     oil: [7.8, 7.4, 7.0, 6.7, 6.5],
@@ -28,7 +28,7 @@ export const PROJECTION_DATA: Record<ScenarioKey, ScenarioData> = {
     confidence: [0, 0.4, 0.7, 1.0, 1.4],
     evidence:
       '<strong>Chỉ cleanser:</strong> giảm dầu 17% + viêm 23%. Nhưng ẩm giảm thêm 10% vì thiếu moisturizer bù.',
-    label: 'Chỉ cleanser',
+    label: 'Chỉ dùng cleanser',
     color: '#EF9F27',
   },
   none: {
@@ -39,7 +39,7 @@ export const PROJECTION_DATA: Record<ScenarioKey, ScenarioData> = {
     evidence:
       '<strong>Không thay đổi routine:</strong> dầu, viêm tăng nhẹ. Ẩm giảm 19% trong 4 tuần. Vấn đề da hiện tại có thể nặng hơn.',
     label: 'Không thay đổi',
-    color: '#888780',
+    color: '#a0aec0',
   },
 }
 

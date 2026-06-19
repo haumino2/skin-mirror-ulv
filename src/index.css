@@ -2,9 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Unilever brand palette */
+  --u-blue: #004d99;
+  --u-blue-light: #e6f0fa;
+  --u-blue-mid: #cce0f5;
+  --u-blue-dark: #003a73;
+
+  /* Neutrals */
+  --u-white: #ffffff;
+  --u-surface: #f7f9fc;
+  --u-border: #e2e8f0;
+  --u-border-light: #f0f4f8;
+
+  /* Text */
+  --u-ink: #1a1a2e;
+  --u-secondary: #4a5568;
+  --u-muted: #718096;
+  --u-tertiary: #a0aec0;
+
+  /* Semantic */
+  --u-success: #38a169;
+  --u-warning: #d97706;
+  --u-danger: #e53e3e;
+
+  /* Font */
+  --font-sans: 'Be Vietnam Pro', sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif;
-  background: #f5f5f5;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background: var(--u-surface);
+  color: var(--u-ink);
   -webkit-font-smoothing: antialiased;
 }

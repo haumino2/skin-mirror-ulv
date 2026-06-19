@@ -7,15 +7,15 @@ const METRICS: Array<{
   { label: "Dầu", value: 7.8, percent: 78, color: "#EF9F27" },
   { label: "Ẩm", value: 4.2, percent: 42, color: "#85B7EB" },
   { label: "Viêm", value: 6.2, percent: 62, color: "#E24B4A" },
-  { label: "Lỗ chân lông", value: 5.5, percent: 55, color: "#888780" },
-  { label: "Texture", value: 4.8, percent: 48, color: "#888780" },
+  { label: "Lỗ chân lông", value: 5.5, percent: 55, color: "#a0aec0" },
+  { label: "Texture", value: 4.8, percent: 48, color: "#a0aec0" },
 ]
 
 export default function SkinMapDetail() {
   return (
     <div>
       <div className="grid grid-cols-[1fr_1.3fr] gap-3.5 mb-3">
-        <div className="w-full aspect-square bg-sand rounded-lg overflow-hidden relative">
+        <div className="w-full aspect-square bg-sand rounded-2xl overflow-hidden relative shadow-sm">
           <svg
             viewBox="0 0 100 100"
             className="absolute inset-0 w-full h-full"
@@ -57,7 +57,7 @@ export default function SkinMapDetail() {
         </div>
       </div>
 
-      <div className="text-xs text-tertiary leading-relaxed">
+      <div className="text-sm text-secondary leading-relaxed">
         Benchmark (da hỗn hợp): mức <span className="text-ink">dầu</span> và{" "}
         <span className="text-ink">viêm</span> cao hơn trung bình;{" "}
         <span className="text-ink">độ ẩm</span> và <span className="text-ink">texture</span>{" "}
