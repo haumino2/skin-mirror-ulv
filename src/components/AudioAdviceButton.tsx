@@ -35,19 +35,15 @@ const EMOTION_OPTIONS = [
   { value: 'storytelling', label: 'Kể chuyện' },
 ] as const
 
-// Env: VITE_VIENEU_API_KEY — X-API-Key for VieNeu TTS (add to .env.local).
-
 async function fetchVieNeuAudio(
   text: string,
   voiceId: string,
   emotion: string,
 ): Promise<string | null> {
-  const key = import.meta.env.VITE_VIENEU_API_KEY
-  if (!key) return null
   try {
-    const jobRes = await fetch('/api/vieneu/v1/tts', {
+    const jobRes = await fetch('/api/vieneu-tts', {
       method: 'POST',
-      headers: { 'X-API-Key': key, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, voiceId, emotion }),
     })
     if (!jobRes.ok) {
@@ -58,9 +54,7 @@ async function fetchVieNeuAudio(
     console.log('[VieNeu TTS] jobId:', jobId)
     for (let i = 0; i < 15; i++) {
       await new Promise((r) => setTimeout(r, 2000))
-      const poll = await fetch(`/api/vieneu/v1/tts/${jobId}`, {
-        headers: { 'X-API-Key': key },
-      })
+      const poll = await fetch(`/api/vieneu-poll?jobId=${jobId}`)
       const data = await poll.json()
       console.log('[VieNeu TTS] poll:', data)
       if (data.status === 'completed' && data.audioUrl) return data.audioUrl
