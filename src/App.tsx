@@ -9,7 +9,6 @@ import MicroQuiz from "./components/MicroQuiz"
 import ProjectionScreen from "./components/ProjectionScreen"
 import ShareScreen from "./components/ShareScreen"
 import RecoveryScreen from "./components/RecoveryScreen"
-import AdminDashboard from "./components/AdminDashboard"
 import DemoToolbar from "./components/DemoToolbar"
 import { useCallback, useEffect, useState } from "react"
 import { demoSessions } from "./data/demoSessions"
@@ -121,10 +120,6 @@ function App() {
     setCurrentStage(6)
   }, [skinAnalysis, loadDemoPersona])
 
-  const jumpToDashboard = useCallback(() => {
-    setCurrentStage(100)
-  }, [])
-
   const resetDemo = useCallback(() => {
     resetSessionFlow()
     setActivePersonaIndex(null)
@@ -173,7 +168,7 @@ function App() {
 
       if (key === "a") {
         event.preventDefault()
-        jumpToDashboard()
+        window.open("/admin.html", "_blank")
       }
     }
 
@@ -181,13 +176,11 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [
     demoToolbarVisible,
-    jumpToDashboard,
     jumpToResult,
     jumpToShare,
     loadDemoPersona,
   ])
 
-  const isAdminView = currentStage === 100
   const stageBarCurrentStage = currentStage === 99 ? 4 : currentStage
 
   const renderStageContent = () => {
@@ -274,7 +267,6 @@ function App() {
               resetSessionFlow()
               setCurrentStage(0)
             }}
-            onOpenAdmin={() => setCurrentStage(100)}
           />
         )
       case 99:
@@ -299,19 +291,10 @@ function App() {
       onSelectPersona={loadDemoPersona}
       onJumpToResult={jumpToResult}
       onJumpToShare={jumpToShare}
-      onJumpToDashboard={jumpToDashboard}
+      onOpenAdmin={() => window.open('/admin.html', '_blank')}
       onReset={resetDemo}
     />
   ) : null
-
-  if (isAdminView) {
-    return (
-      <>
-        <AdminDashboard onBack={() => setCurrentStage(6)} />
-        {demoToolbar}
-      </>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#e8f0fe] via-[#f7f9fc] to-[#e8f0fe] flex items-center justify-center p-4">

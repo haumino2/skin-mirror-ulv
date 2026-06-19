@@ -20,7 +20,6 @@ type ShareAnalysisInput = SkinAnalysisResult & { insight?: string }
 
 export interface ShareScreenProps {
   onDone: () => void
-  onOpenAdmin?: () => void
   analysis?: ShareAnalysisInput | null
   routineRecommendation?: RoutineRecommendation
   watsonPromo?: WatsonPromo
@@ -89,7 +88,6 @@ type MockAction = 'zalo' | 'watson' | 'screenshot' | null
 
 export default function ShareScreen({
   onDone,
-  onOpenAdmin,
   analysis,
   routineRecommendation,
   watsonPromo = mockWatsonPromo,
@@ -260,15 +258,6 @@ export default function ShareScreen({
         >
           Xong, ra quầy
         </button>
-        {onOpenAdmin ? (
-          <button
-            type="button"
-            onClick={onOpenAdmin}
-            className="mt-3 w-full py-2 text-unilever-600 underline-offset-2 text-sm hover:underline"
-          >
-            Mở dashboard demo
-          </button>
-        ) : null}
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ export interface DemoToolbarProps {
   onSelectPersona: (index: number) => void
   onJumpToResult: () => void
   onJumpToShare: () => void
-  onJumpToDashboard: () => void
+  onOpenAdmin: () => void
   onReset: () => void
 }
 
@@ -21,7 +21,7 @@ export default function DemoToolbar({
   onSelectPersona,
   onJumpToResult,
   onJumpToShare,
-  onJumpToDashboard,
+  onOpenAdmin,
   onReset,
 }: DemoToolbarProps) {
   if (!visible) {
@@ -95,9 +95,9 @@ export default function DemoToolbar({
         </button>
         <button
           type="button"
-          onClick={onJumpToDashboard}
+          onClick={onOpenAdmin}
           className={`${btnBase} border-line text-muted hover:bg-sand`}
-          title="Dashboard (A)"
+          title="Admin dashboard (A)"
         >
           Admin
         </button>
