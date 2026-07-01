@@ -12,13 +12,13 @@ export type MicroQuizProps = {
 }
 
 const GOAL_QUESTION_SCRIPT =
-  "Bạn muốn ưu tiên điều gì hôm nay: cấp ẩm, giảm dầu, làm dịu hay cải thiện texture da?"
+  "Bạn muốn ưu tiên điều gì hôm nay: cấp ẩm, giảm dầu, làm dịu hay cải thiện bề mặt da?"
 
 const GOAL_OPTIONS: { value: SkinGoal; label: string }[] = [
   { value: "hydrate", label: "Cấp ẩm" },
   { value: "reduce_oil", label: "Giảm dầu" },
   { value: "calm", label: "Làm dịu" },
-  { value: "smooth_texture", label: "Texture/lỗ chân lông" },
+  { value: "smooth_texture", label: "Bề mặt da/lỗ chân lông" },
 ]
 
 const PREFERENCE_OPTIONS: { value: RoutinePreference; label: string }[] = [

@@ -55,7 +55,7 @@ export default function RecoveryScreen({ onBackToIdle }: RecoveryScreenProps) {
           className="bg-unilever-50 rounded-2xl shadow-sm py-3.5 px-4 text-sm text-unilever-900 text-left flex items-center justify-between hover:bg-unilever-100 transition cursor-pointer"
           onClick={() => onBackToIdle()}
         >
-          <span>Gặp Beauty Advisor (human) ngay</span>
+          <span>Gặp Beauty Advisor ngay</span>
           <User size={14} className="text-unilever-600 shrink-0" aria-hidden />
         </button>
       </div>

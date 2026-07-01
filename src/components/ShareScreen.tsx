@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { mockWatsonPromo } from '../data/promoConfig'
 import type { WatsonPromo } from '../data/promoConfig'
 import { demoSessions } from '../data/demoSessions'
-import { getConcernLabel } from '../data/vietnameseSkinGlossary'
+import { getConcernLabel, getSkinTypeLabel } from '../data/vietnameseSkinGlossary'
 import type { SkinAnalysisResult } from '../lib/claudeSkinAnalysis'
 import { trackEvent } from '../lib/eventTracker'
 import {
@@ -52,7 +52,7 @@ const SKIN_TYPE_LABELS: Record<string, string> = {
 }
 
 function formatSkinTypeLabel(skinType: string): string {
-  return SKIN_TYPE_LABELS[skinType] ?? skinType
+  return SKIN_TYPE_LABELS[skinType] ?? getSkinTypeLabel(skinType)
 }
 
 const QR_MODULE_PATTERN =
@@ -178,6 +178,9 @@ export default function ShareScreen({
         </div>
 
         <div className="mb-2 text-sm leading-relaxed text-secondary">
+          <span className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-unilever-600">
+            Routine gợi ý
+          </span>
           <span className="mb-1 block font-medium text-ink">
             {resolvedRoutine.title}
           </span>

@@ -198,7 +198,7 @@ export default function ResultScreen({
   const scoreRows: Array<{ key: keyof SkinScores; label: string }> = [
     { key: "redness", label: "Đỏ/viêm" },
     { key: "oiliness", label: "Dầu" },
-    { key: "texture", label: "Texture" },
+    { key: "texture", label: "Bề mặt da" },
     { key: "pores", label: "Lỗ chân lông" },
     { key: "hydration", label: "Thiếu ẩm" },
     { key: "pigmentation", label: "Sạm/nám" },
@@ -284,11 +284,11 @@ export default function ResultScreen({
         {!isPresentationMode ? (
           <>
             <div className="text-[11px] font-semibold tracking-widest text-unilever-600 uppercase mb-1">
-              INSIGHT CHÍNH
+              NHẬN XÉT CHÍNH
             </div>
             <div className="font-semibold text-sm text-unilever-900 leading-snug">
               {analysis
-                ? "Tổng quan: xem các scores & concerns bên dưới để tối ưu routine."
+                ? "Tổng quan: xem chỉ số da và mối quan tâm bên dưới để tối ưu routine."
                 : "Chưa có dữ liệu phân tích. Hãy scan lại để nhận kết quả."}
             </div>
           </>
@@ -348,7 +348,7 @@ export default function ResultScreen({
           {scores ? (
             <div className="mb-4 bg-white rounded-2xl shadow-sm p-4">
               <div className="text-[11px] font-semibold tracking-widest text-unilever-600 uppercase mb-2">
-                Scores (0–100)
+                CHỈ SỐ DA (0–100)
               </div>
               <div className="flex flex-col gap-2.5">
                 {scoreRows.map((row) => {
@@ -375,7 +375,7 @@ export default function ResultScreen({
           {concerns.length ? (
             <div className="mb-3">
               <div className="text-[11px] font-semibold tracking-widest text-unilever-600 uppercase mb-2">
-                Concerns
+                MỐI QUAN TÂM
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {concerns.map((c) => (

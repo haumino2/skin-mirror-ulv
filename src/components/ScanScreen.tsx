@@ -166,7 +166,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
           Phân tích da mặt
         </h1>
         <p className="text-sm text-secondary leading-relaxed text-center mb-5">
-          Upload ảnh hoặc chụp từ webcam để bắt đầu
+          Upload ảnh hoặc chụp ảnh để bắt đầu
         </p>
 
         <div className="flex items-center justify-center gap-2 mb-3">
@@ -209,7 +209,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
           >
             <span className="inline-flex items-center gap-1.5">
               <Camera size={14} />
-              Webcam
+              Chụp ảnh
             </span>
           </button>
         </div>
@@ -243,11 +243,11 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
                   className="shrink-0 bg-white border border-line rounded-xl px-3 h-11 text-xs text-ink disabled:opacity-50"
                   onClick={reset}
                   disabled={isLoading && !previewDataUrl}
-                  title="Làm mới"
+                  title="Làm lại"
                 >
                   <span className="inline-flex items-center gap-1.5">
                     <RefreshCcw size={14} />
-                    Reset
+                    Làm lại
                   </span>
                 </button>
               </div>
@@ -286,7 +286,7 @@ export default function ScanScreen({ onComplete }: ScanScreenProps) {
                 >
                   <span className="inline-flex items-center gap-1.5">
                     <RefreshCcw size={14} />
-                    Reset
+                    Làm lại
                   </span>
                 </button>
               </div>

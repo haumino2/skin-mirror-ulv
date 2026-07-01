@@ -47,7 +47,7 @@ export const demoSessions: DemoSession[] = [
   },
   {
     id: 'texture-pores',
-    label: 'Texture chưa mịn · lỗ chân lông thấy rõ',
+    label: 'Bề mặt da chưa mịn · lỗ chân lông thấy rõ',
     result: {
       skinType: 'Da hỗn hợp thiên dầu',
       concerns: ['uneven_texture', 'visible_pores', 'oily_t_zone'],

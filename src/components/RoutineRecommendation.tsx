@@ -93,7 +93,7 @@ function ProductRoutineCard({
             className="bg-white text-ink rounded-xl h-14 text-base border border-line shrink-0 px-4 sm:min-w-[7.5rem]"
             onClick={onShowBA}
           >
-            Show to BA
+            Gặp Beauty Advisor
           </button>
         ) : null}
       </div>

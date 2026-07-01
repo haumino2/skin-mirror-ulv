@@ -47,7 +47,7 @@ interface WindowWithSpeechRecognition extends Window {
 }
 
 const UNSUPPORTED_ERROR =
-  'Speech recognition is not supported in this browser.'
+  'Trình duyệt này chưa hỗ trợ nhận giọng nói.'
 
 function getWindow(): WindowWithSpeechRecognition | null {
   if (typeof window === 'undefined') return null
@@ -63,20 +63,20 @@ function getSpeechRecognitionConstructor(): SpeechRecognitionConstructor | null 
 function mapSpeechRecognitionError(error: string): string {
   switch (error) {
     case 'no-speech':
-      return 'No speech detected. Please try again.'
+      return 'Không phát hiện giọng nói. Vui lòng thử lại.'
     case 'aborted':
-      return 'Speech recognition was aborted.'
+      return 'Nhận giọng nói đã bị hủy.'
     case 'audio-capture':
-      return 'Microphone is unavailable. Check your device and permissions.'
+      return 'Không truy cập được micro. Kiểm tra thiết bị và quyền truy cập.'
     case 'not-allowed':
     case 'service-not-allowed':
-      return 'Microphone permission was denied.'
+      return 'Quyền truy cập micro bị từ chối.'
     case 'network':
-      return 'Speech recognition failed due to a network error.'
+      return 'Nhận giọng nói thất bại do lỗi mạng.'
     case 'language-not-supported':
-      return 'Vietnamese speech recognition is not supported on this device.'
+      return 'Thiết bị này chưa hỗ trợ nhận giọng nói tiếng Việt.'
     default:
-      return `Speech recognition failed (${error}).`
+      return `Nhận giọng nói thất bại (${error}).`
   }
 }
 
@@ -118,7 +118,7 @@ export function startVietnameseSpeechRecognition(): Promise<string> {
       const alternative = event.results[0]?.[0]
       const transcript = alternative?.transcript?.trim() ?? ''
       if (!transcript) {
-        settle('reject', 'No speech detected. Please try again.')
+        settle('reject', 'Không phát hiện giọng nói. Vui lòng thử lại.')
         return
       }
       settle('resolve', transcript)
@@ -129,14 +129,14 @@ export function startVietnameseSpeechRecognition(): Promise<string> {
     }
 
     recognition.onend = () => {
-      settle('reject', 'Speech recognition ended without a result.')
+      settle('reject', 'Nhận giọng nói kết thúc mà không có kết quả.')
     }
 
     try {
       recognition.start()
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : 'Failed to start speech recognition.'
+        err instanceof Error ? err.message : 'Không thể khởi động nhận giọng nói.'
       settle('reject', message)
     }
   })

@@ -1,5 +1,6 @@
 import { SKU_CATALOGUE } from '../data/skuCatalogue'
 import type { Sku, SkuConcern } from '../data/skuCatalogue'
+import { getMockSkinAnalysisResult, shouldBypassClaudeApi } from './claudeBypass'
 
 export type SkinType = "oily" | "dry" | "combination" | "normal"
 
@@ -71,24 +72,36 @@ function extractJson(text: string): unknown {
   return JSON.parse(jsonText)
 }
 
-export async function analyzeSkin(imageBase64: string): Promise<SkinAnalysisResult> {
-  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
-  if (!apiKey) throw new Error("Missing VITE_ANTHROPIC_API_KEY in environment.")
+export async function analyzeSkin(_imageBase64: string): Promise<SkinAnalysisResult> {
+  if (shouldBypassClaudeApi()) {
+    console.warn('[Claude] Bypass — dùng kết quả demo mock')
+    return getMockSkinAnalysisResult()
+  }
 
-  const normalizedBase64 = imageBase64.includes(",")
-    ? imageBase64.split(",").pop() ?? ""
-    : imageBase64
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
+  if (!apiKey) {
+    console.warn('[Claude] Không có API key — dùng kết quả demo mock')
+    return getMockSkinAnalysisResult()
+  }
+
+  const normalizedBase64 = _imageBase64.includes(",")
+    ? _imageBase64.split(",").pop() ?? ""
+    : _imageBase64
 
   const prompt =
     "Analyze this face image for skin condition. " +
     "Return ONLY valid JSON (no markdown, no explanation) with exactly this structure: " +
     "{ skinType: 'oily'|'dry'|'combination'|'normal', concerns: string[], scores: { redness: number, oiliness: number, texture: number, pores: number, hydration: number, pigmentation: number }, recommendations: string[] } " +
-    "All scores 0-100. recommendations: write exactly 1 string in Vietnamese (tiếng Việt), 2-3 sentences max, " +
+    "All scores 0-100. " +
+    "IMPORTANT: The concerns array must contain short Vietnamese phrases (3-6 words each), not English. " +
+    "Examples: 'Dầu nhẹ vùng chữ T', 'Thiếu ẩm nhẹ', 'Lỗ chân lông thấy rõ', 'Da hơi không đều màu', 'Viêm nhẹ vùng má'. " +
+    "recommendations: write exactly 1 string in Vietnamese (tiếng Việt), 2-3 sentences max, " +
     "describing the skin condition and what the customer should prioritize. " +
     "Example: 'Da bạn đang có dầu cao vùng chữ T và hơi mất nước. Ưu tiên làm sạch nhẹ và dưỡng ẩm cân bằng.' " +
-    "Only mention Simple brand products. Do not use English."
+    "Only mention Simple brand products. Do not use English in concerns or recommendations."
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
       "x-api-key": apiKey,
@@ -119,25 +132,37 @@ export async function analyzeSkin(imageBase64: string): Promise<SkinAnalysisResu
     }),
   })
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => "")
-    throw new Error(`Claude API error (${res.status}): ${errText || res.statusText}`)
-  }
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "")
+      console.warn(`[Claude] API lỗi (${res.status}) — dùng kết quả demo mock`, errText)
+      return getMockSkinAnalysisResult()
+    }
 
-  const data = (await res.json()) as {
-    content?: Array<{ type?: string; text?: string }>
-  }
-  const text: string = String(data.content?.[0]?.text ?? "").trim()
-  if (!text) throw new Error("Claude API returned empty text.")
+    const data = (await res.json()) as {
+      content?: Array<{ type?: string; text?: string }>
+    }
+    const text: string = String(data.content?.[0]?.text ?? "").trim()
+    if (!text) {
+      console.warn('[Claude] Phản hồi rỗng — dùng kết quả demo mock')
+      return getMockSkinAnalysisResult()
+    }
 
-  const parsed = extractJson(text)
-  return normalizeResult(parsed)
+    const parsed = extractJson(text)
+    return normalizeResult(parsed)
+  } catch (error) {
+    console.warn('[Claude] Gọi API thất bại — dùng kết quả demo mock', error)
+    return getMockSkinAnalysisResult()
+  }
 }
 
 export async function selectSkusForCustomer(
   analysis: SkinAnalysisResult,
   concern: SkuConcern
 ): Promise<Sku[]> {
+  if (shouldBypassClaudeApi()) {
+    return getFallbackSkus(concern)
+  }
+
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
   if (!apiKey) return getFallbackSkus(concern)
 

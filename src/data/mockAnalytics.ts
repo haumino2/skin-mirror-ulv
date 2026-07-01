@@ -9,58 +9,58 @@ export interface CapabilityScore {
 
 export const capabilityScores: CapabilityScore[] = [
   {
-    name: 'Customer Engagement',
+    name: 'Tương tác khách hàng',
     score: 80,
     status: 'strong',
-    note: 'Interactive scan + chat + TTS voice',
+    note: 'Quét tương tác + chat + giọng TTS',
   },
   {
-    name: 'Shopper Understanding',
+    name: 'Hiểu khách hàng',
     score: 65,
     status: 'partial',
-    note: 'Skin analysis captures concern + skin type',
+    note: 'Phân tích da thu thập mối quan tâm + loại da',
   },
   {
-    name: 'Personalization',
+    name: 'Cá nhân hóa',
     score: 70,
     status: 'strong',
-    note: 'Per-user SKU + routine recommendation',
+    note: 'Đề xuất SKU + routine theo từng khách',
   },
   {
-    name: 'Sales',
+    name: 'Bán hàng',
     score: 85,
     status: 'strong',
-    note: 'Direct SKU selection + projection upsell',
+    note: 'Chọn SKU trực tiếp + upsell projection',
   },
   {
-    name: 'Promotion',
+    name: 'Khuyến mãi',
     score: 50,
     status: 'partial',
-    note: 'SKU surfacing, no live promo integration',
+    note: 'Hiển thị SKU, chưa tích hợp khuyến mãi trực tiếp',
   },
   {
-    name: 'Learning',
+    name: 'Học hỏi',
     score: 45,
     status: 'partial',
-    note: 'Session analytics, no model feedback loop',
+    note: 'Phân tích phiên, chưa có vòng phản hồi model',
   },
   {
-    name: 'Data Capture',
+    name: 'Thu thập dữ liệu',
     score: 30,
     status: 'gap',
-    note: 'No CRM/CDP persistence yet',
+    note: 'Chưa lưu trữ CRM/CDP',
   },
   {
-    name: 'Operational',
+    name: 'Vận hành',
     score: 25,
     status: 'gap',
-    note: 'No fleet/uptime/restock telemetry',
+    note: 'Chưa có telemetry fleet/uptime/restock',
   },
   {
-    name: 'Cost',
+    name: 'Chi phí',
     score: 18,
     status: 'gap',
-    note: 'Per-scan cost not yet optimized/tracked',
+    note: 'Chi phí mỗi lượt quét chưa được tối ưu/theo dõi',
   },
 ]
 
@@ -72,13 +72,13 @@ export interface FunnelStage {
 }
 
 export const funnelStages: FunnelStage[] = [
-  { stage: 'Sessions', count: 1000 },
-  { stage: 'Consent', count: 620 },
-  { stage: 'Category', count: 540 },
-  { stage: 'Scan', count: 480 },
-  { stage: 'Result', count: 470 },
+  { stage: 'Phiên', count: 1000 },
+  { stage: 'Đồng ý', count: 620 },
+  { stage: 'Danh mục', count: 540 },
+  { stage: 'Quét', count: 480 },
+  { stage: 'Kết quả', count: 470 },
   { stage: 'Projection', count: 310 },
-  { stage: 'Share', count: 95 },
+  { stage: 'Chia sẻ', count: 95 },
 ]
 
 export interface FunnelStageMetrics extends FunnelStage {
@@ -157,11 +157,11 @@ export interface SkinTypeSlice {
 }
 
 export const skinTypeBreakdown: SkinTypeSlice[] = [
-  { type: 'Combination', pct: 34 },
-  { type: 'Oily', pct: 28 },
-  { type: 'Dry', pct: 18 },
-  { type: 'Normal', pct: 12 },
-  { type: 'Sensitive', pct: 8 },
+  { type: 'Da hỗn hợp', pct: 34 },
+  { type: 'Da dầu', pct: 28 },
+  { type: 'Da khô', pct: 18 },
+  { type: 'Da thường', pct: 12 },
+  { type: 'Da nhạy cảm', pct: 8 },
 ]
 
 export interface DayScans {
@@ -170,13 +170,13 @@ export interface DayScans {
 }
 
 export const weeklyTrend: DayScans[] = [
-  { day: 'Mon', scans: 58 },
-  { day: 'Tue', scans: 64 },
-  { day: 'Wed', scans: 71 },
-  { day: 'Thu', scans: 69 },
-  { day: 'Fri', scans: 92 },
-  { day: 'Sat', scans: 118 },
-  { day: 'Sun', scans: 104 },
+  { day: 'T2', scans: 58 },
+  { day: 'T3', scans: 64 },
+  { day: 'T4', scans: 71 },
+  { day: 'T5', scans: 69 },
+  { day: 'T6', scans: 92 },
+  { day: 'T7', scans: 118 },
+  { day: 'CN', scans: 104 },
 ]
 
 export function getTotalWeeklyScans(): number {
@@ -200,9 +200,9 @@ export interface CostSummary {
 }
 
 const costLines: CostLine[] = [
-  { label: 'Claude API (analysis+chat+SKU)', usd: 0.018 },
+  { label: 'Claude API (phân tích + chat + SKU)', usd: 0.018 },
   { label: 'VieNeu TTS', usd: 0.006 },
-  { label: 'Vercel hosting (amortized)', usd: 0.002 },
+  { label: 'Vercel hosting (phân bổ)', usd: 0.002 },
 ]
 
 const monthlyScans = 2400
@@ -329,9 +329,9 @@ export const feedbackSummary: FeedbackSummary = {
     'Đã dùng rồi, muốn thử mới',
   ],
   aiInsights: [
-    "Khách da dầu thường expect brightening — cân nhắc add Pond's vào combo oily+acne",
-    'Concern "thiếu ẩm" có CTR thấp nhất — copy chưa đủ compelling',
-    '23% negative feedback từ khách 35+ — AHC anti-aging chưa được surface đúng lúc',
+    "Khách da dầu thường mong làm sáng da — cân nhắc thêm Pond's vào combo da dầu + mụn",
+    'Mối quan tâm "thiếu ẩm" có CTR thấp nhất — nội dung chưa đủ thuyết phục',
+    '23% phản hồi tiêu cực từ khách 35+ — AHC chống lão hóa chưa được hiển thị đúng lúc',
   ],
 }
 

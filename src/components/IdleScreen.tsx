@@ -43,7 +43,7 @@ export default function IdleScreen({ onStart }: IdleScreenProps) {
           Bắt đầu scan da
         </button>
         <p className="text-xs text-muted text-center mt-3">
-          Watson HCMC · Powered by Simple Skin Mirror AI
+          Watson HCMC · Simple Skin Mirror AI
         </p>
       </div>
     </div>

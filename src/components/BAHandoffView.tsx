@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { mockWatsonPromo, type WatsonPromo } from '../data/promoConfig'
-import { formatConcernList, getConcernLabel } from '../data/vietnameseSkinGlossary'
+import { formatConcernList, getConcernLabel, getSkinTypeLabel } from '../data/vietnameseSkinGlossary'
 import type {
   RoutineRecommendation,
   SkinAnalysisResult,
@@ -25,12 +25,12 @@ const GOAL_LABELS: Record<SkinGoal, string> = {
   hydrate: 'cấp ẩm',
   reduce_oil: 'giảm dầu',
   calm: 'làm dịu',
-  smooth_texture: 'cải thiện texture',
+  smooth_texture: 'cải thiện bề mặt da',
 }
 
 function formatSkinType(skinType: string): string {
   const key = skinType.trim().toLowerCase()
-  return SKIN_TYPE_LABELS[key] ?? skinType
+  return SKIN_TYPE_LABELS[key] ?? getSkinTypeLabel(skinType).toLowerCase()
 }
 
 function buildBaPitch(
@@ -47,7 +47,7 @@ function buildBaPitch(
   const firstProduct =
     recommendation?.products[0]?.name ?? 'sản phẩm Simple phù hợp'
 
-  return `Khách có xu hướng ${skinType}, concern chính là ${primaryConcern}. Nên tư vấn routine Simple theo hướng ${goal}, ưu tiên ${firstProduct}.`
+  return `Khách có xu hướng ${skinType}, mối quan tâm chính là ${primaryConcern}. Nên tư vấn routine Simple theo hướng ${goal}, ưu tiên ${firstProduct}.`
 }
 
 function Section({
@@ -105,7 +105,7 @@ export default function BAHandoffView({
       </header>
 
       <div className="flex flex-col gap-3">
-        <Section title="Skin profile">
+        <Section title="Hồ sơ da">
           <p className="mb-1.5 font-semibold text-sm text-ink">
             {formatSkinType(skinResult.skinType)}
           </p>
@@ -114,11 +114,11 @@ export default function BAHandoffView({
           ) : null}
         </Section>
 
-        <Section title="Concern chính">
+        <Section title="Mối quan tâm chính">
           {skinResult.concerns.length ? (
             <p className="text-sm text-ink">{concernLabels}</p>
           ) : (
-            <p className="text-xs text-muted">Chưa có concern nổi bật.</p>
+            <p className="text-xs text-muted">Chưa có mối quan tâm nổi bật.</p>
           )}
         </Section>
 
@@ -151,7 +151,7 @@ export default function BAHandoffView({
           </p>
         </Section>
 
-        <Section title="Promo / combo cần kiểm tra">
+        <Section title="Ưu đãi / combo cần kiểm tra">
           <p className="mb-1 font-semibold text-sm text-ink">{promo.comboName}</p>
           <p className="mb-1 text-sm leading-snug text-secondary">{promo.description}</p>
           <p className="text-xs leading-snug text-muted">{promo.disclaimer}</p>

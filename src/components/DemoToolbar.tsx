@@ -30,8 +30,8 @@ export default function DemoToolbar({
         type="button"
         onClick={onToggleVisible}
         className="fixed bottom-3 right-3 z-50 h-8 px-2.5 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm text-[10px] text-muted hover:text-ink hover:bg-white"
-        aria-label="Mở demo toolbar (D)"
-        title="Demo toolbar (D)"
+        aria-label="Mở thanh demo (D)"
+        title="Thanh demo (D)"
       >
         Demo
       </button>
@@ -42,11 +42,11 @@ export default function DemoToolbar({
     <div
       className="fixed bottom-3 right-3 z-50 flex flex-col gap-2 max-w-[220px] p-3 rounded-2xl bg-white/95 backdrop-blur-sm shadow-sm"
       role="toolbar"
-      aria-label="Demo presenter toolbar"
+      aria-label="Thanh trình diễn demo"
     >
       <div className="flex items-center justify-between gap-2">
         <span className="text-[10px] font-medium uppercase tracking-wide text-tertiary">
-          Presenter
+          Trình diễn
         </span>
         <button
           type="button"
@@ -97,7 +97,7 @@ export default function DemoToolbar({
           type="button"
           onClick={onOpenAdmin}
           className={`${btnBase} border-line text-muted hover:bg-sand`}
-          title="Admin dashboard (A)"
+          title="Bảng điều khiển (A)"
         >
           Admin
         </button>
@@ -106,7 +106,7 @@ export default function DemoToolbar({
           onClick={onReset}
           className={`${btnBase} border-line text-muted hover:bg-sand`}
         >
-          Reset
+          Làm lại
         </button>
       </div>
 

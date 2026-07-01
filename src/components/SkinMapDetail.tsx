@@ -8,7 +8,7 @@ const METRICS: Array<{
   { label: "Ẩm", value: 4.2, percent: 42, color: "#85B7EB" },
   { label: "Viêm", value: 6.2, percent: 62, color: "#E24B4A" },
   { label: "Lỗ chân lông", value: 5.5, percent: 55, color: "#a0aec0" },
-  { label: "Texture", value: 4.8, percent: 48, color: "#a0aec0" },
+  { label: "Bề mặt da", value: 4.8, percent: 48, color: "#a0aec0" },
 ]
 
 export default function SkinMapDetail() {
@@ -58,9 +58,9 @@ export default function SkinMapDetail() {
       </div>
 
       <div className="text-sm text-secondary leading-relaxed">
-        Benchmark (da hỗn hợp): mức <span className="text-ink">dầu</span> và{" "}
+        So sánh (da hỗn hợp): mức <span className="text-ink">dầu</span> và{" "}
         <span className="text-ink">viêm</span> cao hơn trung bình;{" "}
-        <span className="text-ink">độ ẩm</span> và <span className="text-ink">texture</span>{" "}
+        <span className="text-ink">độ ẩm</span> và <span className="text-ink">bề mặt da</span>{" "}
         ở mức trung bình–thấp. Ưu tiên cân bằng dầu vùng chữ T và làm dịu vùng má/cằm.
       </div>
     </div>

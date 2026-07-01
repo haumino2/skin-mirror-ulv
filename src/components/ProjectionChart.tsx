@@ -123,7 +123,7 @@ export default function ProjectionChart({
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 pb-2 shadow-sm">
       <h3 className="mb-1 ml-2 text-[11px] font-medium text-muted">
-        Trajectory 3 metric chính
+        Xu hướng 3 chỉ số chính
       </h3>
       <p className="mb-2 ml-2 text-[10px] italic text-tertiary">
         Vùng nhạt = khoảng tin cậy 80% · đường đậm = giá trị mô phỏng trung bình

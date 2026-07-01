@@ -82,7 +82,7 @@ export default function ProjectionScreen({
       <div className="mb-3 flex items-start justify-between">
         <div className="min-w-0 pr-2">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-widest text-unilever-600">
-            SKIN TRAJECTORY · 4 TUẦN
+            XU HƯỚNG DA · 4 TUẦN
           </p>
           <h2 className="mb-0.5 text-2xl font-bold text-ink">
             Mô phỏng routine 4 tuần
@@ -217,7 +217,7 @@ export default function ProjectionScreen({
 
       <div className="mb-3 rounded-2xl bg-unilever-50 px-4 py-3">
         <p className="mb-1 text-[11px] font-semibold uppercase tracking-widest text-unilever-600">
-          INSIGHT CHÍNH
+          NHẬN XÉT CHÍNH
         </p>
         <div
           className="text-sm leading-relaxed text-unilever-900 [&_strong]:font-medium"
@@ -229,7 +229,7 @@ export default function ProjectionScreen({
         <strong className="font-medium not-italic text-secondary">
           Mô phỏng dựa trên
         </strong>{' '}
-        dữ liệu clinical aggregated · kết quả thực tế phụ thuộc routine, môi
+        dữ liệu lâm sàng tổng hợp · kết quả thực tế phụ thuộc routine, môi
         trường, di truyền. Mirror không thay thế tư vấn bác sĩ da liễu.
       </div>
 

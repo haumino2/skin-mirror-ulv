@@ -256,8 +256,8 @@ function WeeklySparkline({ animate }: { animate: boolean }) {
         ))}
       </svg>
       <p className="mt-2 text-xs text-gray-500">
-        Peak: <span className="font-medium text-[#004d99]">{peak.day}</span>{' '}
-        <span className="tabular-nums font-semibold text-gray-800">{peak.scans}</span> scans
+        Đỉnh: <span className="font-medium text-[#004d99]">{peak.day}</span>{' '}
+        <span className="tabular-nums font-semibold text-gray-800">{peak.scans}</span> lượt scan
       </p>
     </div>
   )
@@ -297,14 +297,14 @@ function PositiveRateDonut({ rate, animate }: { rate: number; animate: boolean }
           <span className="text-2xl font-bold tabular-nums text-[#004d99]">
             {formatPercent(rate * 100)}
           </span>
-          <span className="text-[11px] text-gray-500">Positive</span>
+          <span className="text-[11px] text-gray-500">Tích cực</span>
         </div>
       </div>
       <p className="mt-3 text-sm text-gray-500">
         <span className="tabular-nums font-medium text-gray-700">
           {formatNumber(feedbackSummary.totalFeedback)}
         </span>{' '}
-        total feedback
+        tổng phản hồi
       </p>
     </div>
   )
@@ -352,6 +352,12 @@ const INSIGHT_ICONS = [LightbulbIcon, TrendingUpIcon, TargetIcon]
 
 type FeedbackFilter = 'all' | 'positive' | 'negative'
 
+const FEEDBACK_FILTER_LABELS: Record<FeedbackFilter, string> = {
+  all: 'Tất cả',
+  positive: 'Tích cực',
+  negative: 'Tiêu cực',
+}
+
 function FeedbackBadge({ feedback }: { feedback: FeedbackEntry['feedback'] }) {
   const isPositive = feedback === 'positive'
   return (
@@ -363,7 +369,7 @@ function FeedbackBadge({ feedback }: { feedback: FeedbackEntry['feedback'] }) {
       <span
         className={`h-1.5 w-1.5 rounded-full ${isPositive ? 'bg-green-600' : 'bg-red-600'}`}
       />
-      {isPositive ? 'Positive' : 'Negative'}
+      {isPositive ? 'Tích cực' : 'Tiêu cực'}
     </span>
   )
 }
@@ -424,18 +430,20 @@ export default function AdminDashboard() {
       <div className="mx-auto max-w-7xl space-y-6">
         <header className="border-b border-gray-200 pb-6">
           <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
-            Unilever Vietnam · Beauty &amp; Wellbeing
+            Unilever Vietnam · Làm đẹp &amp; Sức khỏe
           </p>
           <h1 className="mt-1 text-2xl font-bold text-[#004d99] sm:text-3xl">
-            Simple Skin Mirror — BU Capability Dashboard
+            Skin Mirror Retail Learning
           </h1>
-          <p className="mt-1 text-sm text-gray-500">Watson HCMC · Live Demo</p>
+          <p className="mt-1 text-sm text-gray-500">
+            Bảng điều khiển Demo · Watson HCMC
+          </p>
         </header>
 
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <DashboardCard>
             <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
-              Overall Coverage
+              Độ phủ tổng thể
             </p>
             <div className="mt-2 flex items-center gap-3">
               <ProgressRing value={OVERALL_COVERAGE} />
@@ -447,37 +455,37 @@ export default function AdminDashboard() {
 
           <DashboardCard>
             <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
-              Total Scans
+              Tổng lượt scan
             </p>
             <p className="mt-2 text-3xl font-bold tabular-nums text-gray-900">
               {formatNumber(totalWeeklyScans)}
             </p>
-            <p className="mt-1 text-xs text-gray-400">This week</p>
+            <p className="mt-1 text-xs text-gray-400">Tuần này</p>
           </DashboardCard>
 
           <DashboardCard>
             <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
-              Share Rate
+              Tỷ lệ chia sẻ
             </p>
             <p className="mt-2 text-3xl font-bold tabular-nums text-gray-900">
               {formatPercent(shareRate * 100, 1)}
             </p>
-            <p className="mt-1 text-xs text-gray-400">Share ÷ Sessions</p>
+            <p className="mt-1 text-xs text-gray-400">Chia sẻ ÷ Phiên</p>
           </DashboardCard>
 
           <DashboardCard>
             <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
-              Est. Cost / Scan
+              Chi phí ước tính / lượt
             </p>
             <p className="mt-2 text-3xl font-bold tabular-nums text-gray-900">
               {formatUsd(costSummary.totalPerScan)}
             </p>
-            <p className="mt-1 text-xs text-gray-400">All services combined</p>
+            <p className="mt-1 text-xs text-gray-400">Tổng hợp các dịch vụ</p>
           </DashboardCard>
         </div>
 
         <DashboardCard>
-          <SectionHeader eyebrow="Capability" title="Capability Coverage Scorecard" />
+          <SectionHeader eyebrow="Năng lực" title="Thẻ điểm độ phủ năng lực" />
           <ul className="space-y-4">
             {capabilityScores.map((cap) => (
               <CapabilityBar key={cap.name} cap={cap} animate={animate} />
@@ -486,68 +494,68 @@ export default function AdminDashboard() {
           <div className="mt-5 flex flex-wrap gap-4 border-t border-gray-100 pt-4 text-xs text-gray-500">
             <span className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: STATUS_COLORS.strong }} />
-              Strong
+              Mạnh
             </span>
             <span className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: STATUS_COLORS.partial }} />
-              Partial
+              Một phần
             </span>
             <span className="flex items-center gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: STATUS_COLORS.gap }} />
-              Gap
+              Thiếu
             </span>
           </div>
         </DashboardCard>
 
         <DashboardCard>
-          <SectionHeader eyebrow="Learning & Data Capture" title="Customer Feedback Loop" />
+          <SectionHeader eyebrow="Học hỏi & Thu thập dữ liệu" title="Vòng phản hồi khách hàng" />
 
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                <p className="text-sm font-medium text-gray-600">Feedback Log</p>
+                <p className="text-sm font-medium text-gray-600">Nhật ký phản hồi</p>
                 <div className="flex gap-1 rounded-lg bg-gray-50 p-1">
                   {(['all', 'positive', 'negative'] as const).map((filter) => (
                     <button
                       key={filter}
                       type="button"
                       onClick={() => setFeedbackFilter(filter)}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
+                      className={`h-8 rounded-md px-3 text-xs font-medium transition-colors ${
                         feedbackFilter === filter
                           ? 'bg-[#004d99] text-white'
                           : 'text-gray-500 hover:text-gray-700'
                       }`}
                     >
-                      {filter} ({filterCounts[filter]})
+                      {FEEDBACK_FILTER_LABELS[filter]} ({filterCounts[filter]})
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto rounded-lg border border-gray-100">
                 <table className="w-full min-w-[640px] text-left text-sm">
                   <thead>
-                    <tr className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
-                      <th className="pb-2 pr-3">Time</th>
-                      <th className="pb-2 pr-3">Skin Type</th>
-                      <th className="pb-2 pr-3">Concern</th>
-                      <th className="pb-2 pr-3">Products</th>
-                      <th className="pb-2">Feedback</th>
+                    <tr className="border-b border-gray-100 bg-gray-50/80 text-[10px] font-medium uppercase tracking-wider text-gray-400">
+                      <th className="px-3 py-2.5 pr-3">Thời gian</th>
+                      <th className="px-3 py-2.5 pr-3">Loại da</th>
+                      <th className="px-3 py-2.5 pr-3">Mối quan tâm</th>
+                      <th className="px-3 py-2.5 pr-3">Sản phẩm</th>
+                      <th className="px-3 py-2.5">Phản hồi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {filteredFeedback.map((entry, index) => (
-                      <tr key={`${entry.time}-${index}`} className="hover:bg-gray-50">
-                        <td className="py-3 pr-3 tabular-nums text-gray-500">{entry.time}</td>
-                        <td className="py-3 pr-3 text-gray-800">{entry.skinType}</td>
-                        <td className="py-3 pr-3 text-gray-800">{entry.concern}</td>
-                        <td className="py-3 pr-3">
+                      <tr key={`${entry.time}-${index}`} className="hover:bg-gray-50/80">
+                        <td className="px-3 py-3 pr-3 tabular-nums text-gray-500">{entry.time}</td>
+                        <td className="px-3 py-3 pr-3 text-gray-800">{entry.skinType}</td>
+                        <td className="px-3 py-3 pr-3 text-gray-800">{entry.concern}</td>
+                        <td className="px-3 py-3 pr-3">
                           <span className="text-gray-800">{entry.products}</span>
                           {entry.feedback === 'negative' && entry.note ? (
                             <p className="mt-0.5 text-xs text-gray-400">{entry.note}</p>
                           ) : null}
                         </td>
-                        <td className="py-3">
+                        <td className="px-3 py-3">
                           <FeedbackBadge feedback={entry.feedback} />
                         </td>
                       </tr>
@@ -557,14 +565,14 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 lg:border-l lg:border-gray-100 lg:pl-6">
               <div>
-                <p className="mb-3 text-sm font-medium text-gray-600">Learning Summary</p>
+                <p className="mb-3 text-sm font-medium text-gray-600">Tóm tắt học hỏi</p>
                 <PositiveRateDonut rate={feedbackSummary.positiveRate} animate={animate} />
               </div>
 
               <div>
-                <p className="mb-3 text-sm font-medium text-gray-600">Top Negative Reasons</p>
+                <p className="mb-3 text-sm font-medium text-gray-600">Lý do tiêu cực hàng đầu</p>
                 <ol className="space-y-2">
                   {feedbackSummary.topNegativeReasons.map((reason, index) => (
                     <li key={reason} className="flex items-start gap-2.5 text-sm text-gray-600">
@@ -580,7 +588,7 @@ export default function AdminDashboard() {
           </div>
 
           <div className="mt-6 border-t border-gray-100 pt-6">
-            <p className="mb-4 text-sm font-medium text-gray-600">AI Improvement Insights</p>
+            <p className="mb-4 text-sm font-medium text-gray-600">Gợi ý cải thiện AI</p>
             <div className="grid gap-4 md:grid-cols-3">
               {feedbackSummary.aiInsights.map((insight, index) => {
                 const Icon = INSIGHT_ICONS[index] ?? LightbulbIcon
@@ -605,7 +613,7 @@ export default function AdminDashboard() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           <DashboardCard>
-            <SectionHeader eyebrow="Funnel" title="Conversion Funnel" />
+            <SectionHeader eyebrow="Phễu" title="Phễu chuyển đổi" />
             <ul className="space-y-3">
               {funnelMetrics.map((stage) => {
                 const isBiggestDrop =
@@ -621,7 +629,7 @@ export default function AdminDashboard() {
                         {formatNumber(stage.count)}
                         {stage.retainedFromPrevious !== null ? (
                           <span className="ml-2 text-xs text-gray-400">
-                            {formatPercent(stage.retainedFromPrevious, 1)} retained
+                            {formatPercent(stage.retainedFromPrevious, 1)} giữ lại
                           </span>
                         ) : null}
                       </span>
@@ -634,7 +642,7 @@ export default function AdminDashboard() {
                     />
                     {isBiggestDrop ? (
                       <p className="mt-1 text-xs font-medium text-amber-700">
-                        Biggest drop-off: {formatPercent(biggestDropOff.dropOffPct, 1)} from{' '}
+                        Mức rơi lớn nhất: {formatPercent(biggestDropOff.dropOffPct, 1)} từ{' '}
                         {biggestDropOff.fromStage}
                       </p>
                     ) : null}
@@ -645,14 +653,14 @@ export default function AdminDashboard() {
           </DashboardCard>
 
           <DashboardCard>
-            <SectionHeader eyebrow="Demographics" title="Skin Type Breakdown" />
+            <SectionHeader eyebrow="Đối tượng" title="Phân bố loại da" />
             <SkinTypeDonut animate={animate} />
           </DashboardCard>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           <DashboardCard>
-            <SectionHeader eyebrow="Brands" title="Brand Performance" />
+            <SectionHeader eyebrow="Thương hiệu" title="Hiệu suất thương hiệu" />
             <ul className="space-y-3">
               {brandStats.map((brand) => (
                 <li key={brand.brand}>
@@ -661,7 +669,7 @@ export default function AdminDashboard() {
                     <span className="shrink-0 tabular-nums text-gray-600">
                       {formatNumber(brand.recommendations)}
                       <span className="ml-2 text-xs text-gray-400">
-                        {formatPercent(brand.shareOfVoice, 1)} SOV
+                        {formatPercent(brand.shareOfVoice, 1)} thị phần
                       </span>
                     </span>
                   </div>
@@ -677,16 +685,16 @@ export default function AdminDashboard() {
           </DashboardCard>
 
           <DashboardCard>
-            <SectionHeader eyebrow="Traffic" title="Weekly Trend" />
+            <SectionHeader eyebrow="Lưu lượng" title="Xu hướng theo tuần" />
             <WeeklySparkline animate={animate} />
           </DashboardCard>
         </div>
 
         <DashboardCard>
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <SectionHeader eyebrow="Unit Economics" title="Cost Per Scan" />
+            <SectionHeader eyebrow="Kinh tế đơn vị" title="Chi phí mỗi lượt quét" />
             <span className="rounded-full bg-red-50 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-red-600">
-              Optimization opportunity
+              Cơ hội tối ưu
             </span>
           </div>
 
@@ -711,17 +719,17 @@ export default function AdminDashboard() {
 
           <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-gray-100 pt-4">
             <div>
-              <p className="text-xs text-gray-400">Total per scan</p>
+              <p className="text-xs text-gray-400">Tổng mỗi lượt</p>
               <p className="text-2xl font-bold tabular-nums text-[#004d99]">
                 {formatUsd(costSummary.totalPerScan)}
               </p>
             </div>
             <p className="text-sm text-gray-500">
-              ≈ {formatUsdTotal(costSummary.monthlyEstimate)} / mo @{' '}
+              ≈ {formatUsdTotal(costSummary.monthlyEstimate)} / tháng @{' '}
               <span className="tabular-nums font-medium text-gray-700">
                 {formatNumber(costSummary.monthlyScans)}
               </span>{' '}
-              scans
+              lượt scan
             </p>
           </div>
         </DashboardCard>

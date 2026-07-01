@@ -1,4 +1,6 @@
 import { sanitizeBeautyCopy } from '../data/vietnamesePersona'
+import { getSkinTypeLabel } from '../data/vietnameseSkinGlossary'
+import { getMockChatAnswer, shouldBypassClaudeApi } from './claudeBypass'
 import type {
   RoutinePreference,
   RoutineRecommendation,
@@ -15,7 +17,7 @@ export type AnswerVietnameseQuestionParams = {
 }
 
 const SYSTEM_PROMPT =
-  'Bạn là chuyên gia tư vấn da của Simple Skin Mirror tại Watson. Chỉ tư vấn về sản phẩm Simple. Trả lời ngắn gọn bằng tiếng Việt, tối đa 3 câu. Không dùng thuật ngữ khoa học phức tạp.'
+  'Bạn là chuyên gia tư vấn da của Simple Skin Mirror tại Watson. Chỉ tư vấn về sản phẩm Simple. Trả lời ngắn gọn bằng tiếng Việt, tối đa 3 câu. Không dùng thuật ngữ khoa học phức tạp. Khi mô tả mối quan tâm da, dùng cụm tiếng Việt ngắn (3-6 từ), ví dụ: "Dầu nhẹ vùng chữ T", "Thiếu ẩm nhẹ".'
 
 function buildUserMessage(params: AnswerVietnameseQuestionParams): string {
   const { question, skinResult, recommendation, selectedGoal } = params
@@ -25,7 +27,7 @@ function buildUserMessage(params: AnswerVietnameseQuestionParams): string {
   const scoresText = [
     `đỏ: ${scores.redness}`,
     `dầu: ${scores.oiliness}`,
-    `texture: ${scores.texture}`,
+    `bề mặt da: ${scores.texture}`,
     `lỗ chân lông: ${scores.pores}`,
     `cấp ẩm: ${scores.hydration}`,
     `xỉn màu: ${scores.dullness}`,
@@ -33,7 +35,7 @@ function buildUserMessage(params: AnswerVietnameseQuestionParams): string {
 
   return [
     'Thông tin khách hàng:',
-    `- Loại da: ${skinResult.skinType}`,
+    `- Loại da: ${getSkinTypeLabel(skinResult.skinType)}`,
     `- Điểm số: ${scoresText}`,
     `- Nhận xét: ${skinResult.insight.trim() || 'không có'}`,
     `- Sản phẩm gợi ý: ${productNames}`,
@@ -65,12 +67,19 @@ function extractAssistantText(data: {
 export async function answerVietnameseQuestion(
   params: AnswerVietnameseQuestionParams,
 ): Promise<string> {
-  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
-  if (!apiKey) {
-    throw new Error('Missing VITE_ANTHROPIC_API_KEY in environment.')
+  if (shouldBypassClaudeApi()) {
+    console.warn('[Claude] Bypass — dùng câu trả lời demo mock')
+    return sanitizeBeautyCopy(getMockChatAnswer(params))
   }
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
+  if (!apiKey) {
+    console.warn('[Claude] Không có API key — dùng câu trả lời demo mock')
+    return sanitizeBeautyCopy(getMockChatAnswer(params))
+  }
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'x-api-key': apiKey,
@@ -92,14 +101,19 @@ export async function answerVietnameseQuestion(
     }),
   })
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '')
-    throw new Error(`Claude API error (${res.status}): ${errText || res.statusText}`)
-  }
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '')
+      console.warn(`[Claude] API lỗi (${res.status}) — dùng câu trả lời demo mock`, errText)
+      return sanitizeBeautyCopy(getMockChatAnswer(params))
+    }
 
-  const data = (await res.json()) as {
-    content?: Array<{ type?: string; text?: string }>
-  }
+    const data = (await res.json()) as {
+      content?: Array<{ type?: string; text?: string }>
+    }
 
-  return sanitizeBeautyCopy(extractAssistantText(data))
+    return sanitizeBeautyCopy(extractAssistantText(data))
+  } catch (error) {
+    console.warn('[Claude] Gọi API thất bại — dùng câu trả lời demo mock', error)
+    return sanitizeBeautyCopy(getMockChatAnswer(params))
+  }
 }

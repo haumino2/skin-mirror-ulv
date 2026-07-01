@@ -10,6 +10,19 @@ export const vietnameseSkinGlossary: Record<SkinConcern, string> = {
   dullness: 'da hơi xỉn màu',
 }
 
+export const SKIN_TYPE_LABELS: Record<string, string> = {
+  oily: 'Da dầu',
+  dry: 'Da khô',
+  combination: 'Da hỗn hợp',
+  normal: 'Da thường',
+  sensitive: 'Da nhạy cảm',
+}
+
+export function getSkinTypeLabel(skinType: string): string {
+  const key = skinType.trim().toLowerCase()
+  return SKIN_TYPE_LABELS[key] ?? skinType
+}
+
 export function getConcernLabel(concern: SkinConcern | string): string {
   if (concern in vietnameseSkinGlossary) {
     return vietnameseSkinGlossary[concern as SkinConcern]

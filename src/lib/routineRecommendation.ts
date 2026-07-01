@@ -1,4 +1,5 @@
 import { simpleProducts } from '../data/simpleProducts'
+import { getSkinTypeLabel } from '../data/vietnameseSkinGlossary'
 import type { SkinAnalysisResult } from './claudeSkinAnalysis'
 import type {
   Product,
@@ -11,7 +12,7 @@ const GOAL_LABELS: Record<SkinGoal, string> = {
   hydrate: 'Cấp ẩm',
   reduce_oil: 'Giảm dầu',
   calm: 'Làm dịu',
-  smooth_texture: 'Texture/lỗ chân lông',
+  smooth_texture: 'Bề mặt da/lỗ chân lông',
 }
 
 const GOAL_CONCERNS: Record<SkinGoal, string[]> = {
@@ -101,7 +102,7 @@ export function buildRoutineRecommendation(
 
   return {
     title: `Routine Simple · ${GOAL_LABELS[goal]}`,
-    summary: `Gợi ý ${products.length} sản phẩm phù hợp với ${result.skinType} — ưu tiên ${goalLabel}.`,
+    summary: `Gợi ý ${products.length} sản phẩm phù hợp với ${getSkinTypeLabel(result.skinType)} — ưu tiên ${goalLabel}.`,
     products,
     preference,
     goal,
